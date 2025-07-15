@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 public class Login extends BaseClass{
 
-    @test
+    @Test
     login success(){
         Map<Object,Object> map=new HashMap<>();
         map.put("test","meha");
