@@ -1,4 +1,32 @@
+package base;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.bson.json.JsonMode;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.APIResponse;
+import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.RequestOptions;
 
 public class BaseClass {
@@ -37,7 +65,7 @@ public class BaseClass {
 
 	public static APIResponse postRequestWithToken(String URL, String authendication, Object data) {
 		APIRequestContext context=request();
-		APIResponse response = content.post(origin+ URL,
+		APIResponse response = context.post(origin+ URL,
 				RequestOptions.create().setHeader("Authorization", authendication)
 						.setHeader("Content-Type", "application/json").setHeader("Application", "Iksana-Base")
 						.setData(data));
@@ -48,7 +76,7 @@ public class BaseClass {
 
 	public static APIResponse postRequestWithoutToken(String URL, String Type, Object data) {
 		APIRequestContext context=request();
-		APIResponse response = content.post(origin + URL,
+		APIResponse response = context.post(origin + URL,
 				RequestOptions.create().setHeader("Content-Type", "application/json").setHeader("Channel", Type)
 						.setHeader("Application", "Iksana-Base").setData(data));
 		return response;
@@ -58,7 +86,7 @@ public class BaseClass {
 
 	public static APIResponse putRequestWithToken(String URL, String authendication, Object data) {
 		APIRequestContext context=request();
-		APIResponse response = content.put(origin + URL,
+		APIResponse response = context.put(origin + URL,
 				RequestOptions.create().setHeader("Authorization", authendication)
 						.setHeader("Content-Type", "application/json").setData(data));
 		return response;
@@ -92,7 +120,7 @@ public class BaseClass {
 	public static void toCreateNewRow(String sheetName, int rowNo, int cellNo, String value)
 			throws IOException {
 		String fileLocation=folderLocation();		
-		File f = new File(fileLocation+"\\Iksana_Inputs.xlsx");
+		File f = new File(fileLocation + "\\Iksana_Inputs.xlsx");
 		FileInputStream fil = new FileInputStream(f);
 		Workbook b = new XSSFWorkbook(fil);
 		Sheet sh = b.getSheet(sheetName);
@@ -134,58 +162,58 @@ public class BaseClass {
 		b.write(fo);
 	}
 
-	public static String toReadDataFromExcel(String sheetName, int rowNo, int cellNo)
-			throws IOException {
+	//  public static String toReadDataFromExcel(String sheetName, int rowNo, int cellNo)
+	// 		throws IOException {
 
-		String fileLocation=folderLocation();		
-		File f = new File(fileLocation+"\\Iksana_Inputs.xlsx");
-		FileInputStream fin = new FileInputStream(f);
-		Workbook b = new XSSFWorkbook(fin);
-		Sheet sh = b.getSheet(sheetName);
-		Cell c = sh.getRow(rowNo).getCell(cellNo);
-		int type = c.getCellType();
-		String res;
-		if (type == 1) {
-			res = c.getStringCellValue();
-		} else if (DateUtil.isCellDateFormatted(c)) {
-			Date da = c.getDateCellValue();
-			SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yyyy");
-			res = sim.format(da);
-		} else {
-			double d = c.getNumericCellValue();
-			long l = (long) d;
-			res = String.valueOf(l);
-		}
-		return res;
+	// 	String fileLocation=folderLocation();		
+	// 	File f = new File(fileLocation+"\\Iksana_Inputs.xlsx");
+	// 	FileInputStream fin = new FileInputStream(f);
+	// 	Workbook b = new XSSFWorkbook(fin);
+	// 	Sheet sh = b.getSheet(sheetName);
+	// 	Cell c = sh.getRow(rowNo).getCell(cellNo);
+	// 	int type = c.getCellType();
+	// 	String res;
+	// 	if (type == 1) {
+	// 		res = c.getStringCellValue();
+	// 	} else if (DateUtil.isCellDateFormatted(c)) {
+	// 		Date da = c.getDateCellValue();
+	// 		SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yyyy");
+	// 		res = sim.format(da);
+	// 	} else {
+	// 		double d = c.getNumericCellValue();
+	// 		long l = (long) d;
+	// 		res = String.valueOf(l);
+	// 	}
+	// 	return res;
 
-	}
+	// }
 
-	public static String resultsReadDataFromExcel(String sheetName, int rowNo, int cellNo)
-			throws IOException {
+	//  public static String resultsReadDataFromExcel(String sheetName, int rowNo, int cellNo)
+	// 		throws IOException {
 
 
-        String fileLocation=folderLocation();
-		File f = new File(fileLocation+"\\Iksana_API_Testing_Testcases_v0.1.xlsx");
-		FileInputStream fin = new FileInputStream(f);
-		Workbook b = new XSSFWorkbook(fin);
-		Sheet sh = b.getSheet(sheetName);
-		Cell c = sh.getRow(rowNo).getCell(cellNo);
-		int type = c.getCellType();
-		String res;
-		if (type == 1) {
-			res = c.getStringCellValue();
-		} else if (DateUtil.isCellDateFormatted(c)) {
-			Date da = c.getDateCellValue();
-			SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yyyy");
-			res = sim.format(da);
-		} else {
-			double d = c.getNumericCellValue();
-			long l = (long) d;
-			res = String.valueOf(l);
-		}
-		return res;
+    //     String fileLocation=folderLocation();
+	// 	File f = new File(fileLocation+"\\Iksana_API_Testing_Testcases_v0.1.xlsx");
+	// 	FileInputStream fin = new FileInputStream(f);
+	// 	Workbook b = new XSSFWorkbook(fin);
+	// 	Sheet sh = b.getSheet(sheetName);
+	// 	Cell c = sh.getRow(rowNo).getCell(cellNo);
+	// 	int type = c.getCellType();
+	// 	String res;
+	// 	if (type == 1) {
+	// 		res = c.getStringCellValue();
+	// 	} else if (DateUtil.isCellDateFormatted(c)) {
+	// 		Date da = c.getDateCellValue();
+	// 		SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yyyy");
+	// 		res = sim.format(da);
+	// 	} else {
+	// 		double d = c.getNumericCellValue();
+	// 		long l = (long) d;
+	// 		res = String.valueOf(l);
+	// 	}
+	// 	return res;
 
-	}
+	// }
 
 	// Base64 encryption
 
@@ -240,7 +268,6 @@ public class BaseClass {
         }
 		return null;
     }
-
 
 
 }
