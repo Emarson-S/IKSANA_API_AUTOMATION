@@ -10,12 +10,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import org.bson.json.JsonMode;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,66 +96,66 @@ public class BaseClass {
 	}
 
 	// create new Excel Sheet
-	public static void tocreateExcelSheet(String fileName, String sheetName, int rowNo, int cellNo, String value)
-			throws IOException {
-		String fileLocation=folderLocation();
-		File f = new File(fileLocation+"\\Iksana_Inputs\\" + fileName + ".xlsx");
-		FileInputStream fil = new FileInputStream(f);
-		Workbook b = new XSSFWorkbook(fil);
-		Sheet sh = b.createSheet(sheetName);
-		Row r = sh.createRow(rowNo);
-		Cell c = r.createCell(cellNo);
-		c.setCellValue(value);
-		FileOutputStream fo = new FileOutputStream(f);
-		b.write(fo);
+	// public static void tocreateExcelSheet(String fileName, String sheetName, int rowNo, int cellNo, String value)
+	// 		throws IOException {
+	// 	String fileLocation=folderLocation();
+	// 	File f = new File(fileLocation+"\\Iksana_Inputs\\" + fileName + ".xlsx");
+	// 	FileInputStream fil = new FileInputStream(f);
+	// 	Workbook b = new XSSFWorkbook(fil);
+	// 	Sheet sh = b.createSheet(sheetName);
+	// 	Row r = sh.createRow(rowNo);
+	// 	Cell c = r.createCell(cellNo);
+	// 	c.setCellValue(value);
+	// 	FileOutputStream fo = new FileOutputStream(f);
+	// 	b.write(fo);
 
-	}
+	// }
 
-	// create new row in old Sheet
-	public static void toCreateNewRow(String sheetName, int rowNo, int cellNo, String value)
-			throws IOException {
-		String fileLocation=folderLocation();		
-		File f = new File(fileLocation + "\\Iksana_Inputs.xlsx");
-		FileInputStream fil = new FileInputStream(f);
-		Workbook b = new XSSFWorkbook(fil);
-		Sheet sh = b.getSheet(sheetName);
-		Row r = sh.createRow(rowNo);
-		Cell c = r.createCell(cellNo);
-		c.setCellValue(value);
-		FileOutputStream fo = new FileOutputStream(f);
-		b.write(fo);
+	// // create new row in old Sheet
+	// public static void toCreateNewRow(String sheetName, int rowNo, int cellNo, String value)
+	// 		throws IOException {
+	// 	String fileLocation=folderLocation();		
+	// 	File f = new File(fileLocation + "\\Iksana_Inputs.xlsx");
+	// 	FileInputStream fil = new FileInputStream(f);
+	// 	Workbook b = new XSSFWorkbook(fil);
+	// 	Sheet sh = b.getSheet(sheetName);
+	// 	Row r = sh.createRow(rowNo);
+	// 	Cell c = r.createCell(cellNo);
+	// 	c.setCellValue(value);
+	// 	FileOutputStream fo = new FileOutputStream(f);
+	// 	b.write(fo);
 
-	}
+	// }
 
-	// create new cell in old row
+	// // create new cell in old row
 
-	public static void toCreateNewCell(String sheetName, int rowNo, int cellNo, String value)
-			throws IOException {
-		String fileLocation=folderLocation();
-		File f = new File(fileLocation+"\\Iksana_Inputs.xlsx");
-		FileInputStream fil = new FileInputStream(f);
-		Workbook b = new XSSFWorkbook(fil);
-		Sheet sh = b.getSheet(sheetName);
-		Row r = sh.getRow(rowNo);
-		Cell c = r.createCell(cellNo);
-		c.setCellValue(value);
-		FileOutputStream fo = new FileOutputStream(f);
-		b.write(fo);
-	}
+	// public static void toCreateNewCell(String sheetName, int rowNo, int cellNo, String value)
+	// 		throws IOException {
+	// 	String fileLocation=folderLocation();
+	// 	File f = new File(fileLocation+"\\Iksana_Inputs.xlsx");
+	// 	FileInputStream fil = new FileInputStream(f);
+	// 	Workbook b = new XSSFWorkbook(fil);
+	// 	Sheet sh = b.getSheet(sheetName);
+	// 	Row r = sh.getRow(rowNo);
+	// 	Cell c = r.createCell(cellNo);
+	// 	c.setCellValue(value);
+	// 	FileOutputStream fo = new FileOutputStream(f);
+	// 	b.write(fo);
+	// }
 
-	public static void resultsCreateNewCell(String sheetName, int rowNo, int cellNo, String value)
-			throws IOException {
-		String fileLocation=folderLocation();
-		File f = new File(fileLocation+"\\Iksana_API_Testing_Testcases_v0.1.xlsx");
-		FileInputStream fil = new FileInputStream(f);
-		Workbook b = new XSSFWorkbook(fil);
-		Sheet sh = b.getSheet(sheetName);
-		Row r = sh.getRow(rowNo);
-		Cell c = r.createCell(cellNo);
-		c.setCellValue(value);
-		FileOutputStream fo = new FileOutputStream(f);
-		b.write(fo);
-	}
+	// public static void resultsCreateNewCell(String sheetName, int rowNo, int cellNo, String value)
+	// 		throws IOException {
+	// 	String fileLocation=folderLocation();
+	// 	File f = new File(fileLocation+"\\Iksana_API_Testing_Testcases_v0.1.xlsx");
+	// 	FileInputStream fil = new FileInputStream(f);
+	// 	Workbook b = new XSSFWorkbook(fil);
+	// 	Sheet sh = b.getSheet(sheetName);
+	// 	Row r = sh.getRow(rowNo);
+	// 	Cell c = r.createCell(cellNo);
+	// 	c.setCellValue(value);
+	// 	FileOutputStream fo = new FileOutputStream(f);
+	// 	b.write(fo);
+	// }
 
 	//  public static String toReadDataFromExcel(String sheetName, int rowNo, int cellNo)
 	// 		throws IOException {
