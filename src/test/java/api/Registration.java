@@ -399,6 +399,237 @@ public class Registration extends BaseClass {
         }
 
     @Test
-    public void userRegDuplicationCheckWithCGInDB() {
+    public void userRegCGLimitCheck() {
+
+                                    //Registration_TC_15
+
+    // CG limit check
+        List<Object> caregiverDetails = new ArrayList<>();
+
+        // Loop to create 5 caregivers dynamically
+        for (int i = 0; i < 5; i++) {
+
+            Map<String, Object> familyMember = new HashMap<>();
+            familyMember.put("firstName", "familyMember");
+            familyMember.put("lastName", String.valueOf(i));
+            familyMember.put("dateOfBirth", "15-07-2002");
+            familyMember.put("gender", "Female");
+            familyMember.put("phoneNo", "908070606" + i);  
+            familyMember.put("countryCode", "+91");
+            familyMember.put("profilePhoto", "");
+            familyMember.put("age", "22");
+            familyMember.put("emailVerification", true);
+            familyMember.put("phoneNoVerificatio", true);
+            familyMember.put("email", "user2" + i + "@yopmail.com"); 
+            familyMember.put("relationship", "Brother");
+
+        // Add this familyMember to caregiver list
+        caregiverDetails.add(familyMember);
+        }
+
+        // Now attach caregiverDetails to requestPayload
+        Map<Object, Object> payload = new HashMap<>();
+        payload.put("firstName", "John");
+        payload.put("lastName", "Doe");
+        payload.put("dateOfBirth", "15-07-1982");
+        payload.put("gender", "Male");
+        payload.put("phoneNo", "9080706052");
+        payload.put("countryCode", "+91");
+        payload.put("profilePhoto", "");
+        payload.put("email", "user4@yopmail.com");
+        payload.put("age", "43");
+        payload.put("accept", true);
+        payload.put("emailVerification", true);
+        payload.put("phoneNoVerificatio", true);
+        payload.put("careGivers", caregiverDetails);
+        try {
+            APIResponse responseAPI = postRequestWithoutToken("user-registration", "MOBILE", payload);
+            int statusCode = responseAPI.status();
+            String response = getBodyData(responseAPI).toString();
+            if (isJSONValid(response) && statusCode == 200) {
+                JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
+                String resposeCode = responsebody.get("code").getAsString();
+                String resposeMessage = responsebody.get("message").getAsString();
+                    try {
+                        Assert.assertEquals(resposeCode, "1111");
+                        System.out.println("response code valid : " + resposeCode);
+                    } 
+                    catch (AssertionError e) {
+                            System.out.println("response code invalid : " + resposeCode);
+                    }
+                    try {
+                        Assert.assertEquals(resposeMessage, "You can add up to 4 members only.");
+                        System.out.println("response message is valid : " + resposeMessage);
+                    }
+                    catch (AssertionError e) {
+                            System.out.println("response message invalid : " + resposeMessage);
+                    }
+                    }
+            }
+            catch (Exception e) {
+            System.out.println("An error occurred during registration: " + e.getMessage());
+            }
+    }
+
+    @Test
+    public void userRegWithNullValues() {
+   
+    List<String> caregiverDetails = new ArrayList<>();      //empty cg list
+    // Phone number = null but verification = true
+    Map<Object, Object> payload = new HashMap<>();
+    payload.put("firstName", "Test");
+    payload.put("lastName", "User");
+    payload.put("dateOfBirth", "15-07-1995");
+    payload.put("gender", "Male");
+    payload.put("phoneNo", null); // NULL PHONE
+    payload.put("countryCode", "+91");
+    payload.put("profilePhoto", "");
+    payload.put("email", "usernullphone@yopmail.com");
+    payload.put("age", "30");
+    payload.put("accept", true);
+    payload.put("emailVerification", true);
+    payload.put("phoneNoVerificatio", true);
+    payload.put("careGivers", caregiverDetails);
+
+    // Email = null but verification = true
+    Map<Object, Object> payload1 = new HashMap<>(payload);
+    payload1.put("phoneNo", "9080706099"); // valid phone
+    payload1.put("email", null); // NULL EMAIL
+    payload1.put("emailVerification", true); 
+    payload1.put("phoneNoVerificatio", true);
+
+    List<Map<Object, Object>> reqList = new ArrayList<>();
+    reqList.add(payload);
+    reqList.add(payload1);
+
+    int i = 0;
+    for (Map<Object, Object> request : reqList) {
+        if(i==0){
+            System.out.println("null value on Phone number field");
+        }
+        else if(i==1){
+            System.out.println("null value on email field");
+        }
+        try {
+            APIResponse responseAPI = postRequestWithoutToken("user-registration", "MOBILE", payload);
+            int statusCode = responseAPI.status();
+            String response = getBodyData(responseAPI).toString();
+
+            if (isJSONValid(response) && statusCode == 200) {
+                JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
+                String responseCode = responsebody.get("code").getAsString();
+                String responseMessage = responsebody.get("message").getAsString();
+                try {
+                    Assert.assertEquals(responseCode, "1111");
+                    System.out.println("Response code valid : " + responseCode);
+                } catch (AssertionError e) {
+                    System.out.println("Response code invalid : " + responseCode);
+                }
+                try {
+                    Assert.assertEquals(responseMessage, "Data should not be empty");
+                    System.out.println("Response message valid : " + responseMessage);
+                } catch (AssertionError e) {
+                    System.out.println("Response message invalid : " + responseMessage);
+                }
+            }
+            } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            }
+
+        System.out.println("------------------------");
+        i++;
+    }
 }
+
+    @Test
+    public void caregiverRegWithNullValues() {
+
+    Map<Object, Object> userPayload = new HashMap<>();
+    userPayload.put("firstName", "Periya");
+    userPayload.put("lastName", "saami");
+    userPayload.put("dateOfBirth", "15-07-1985");
+    userPayload.put("gender", "Male");
+    userPayload.put("phoneNo", "9080706011");
+    userPayload.put("countryCode", "+91");
+    userPayload.put("profilePhoto", "");
+    userPayload.put("email", "periyasaami@yopmail.com");
+    userPayload.put("age", "40");
+    userPayload.put("accept", true);
+    userPayload.put("emailVerification", true);
+    userPayload.put("phoneNoVerificatio", true);
+
+    // Phone number = null but verification = true
+    Map<String, Object> caregiverNullPhone = new HashMap<>();
+    caregiverNullPhone.put("firstName", "valli");
+    caregiverNullPhone.put("lastName", "ammal");
+    caregiverNullPhone.put("dateOfBirth", "15-07-1990");
+    caregiverNullPhone.put("gender", "Female");
+    caregiverNullPhone.put("phoneNo", null);
+    caregiverNullPhone.put("countryCode", "+91");
+    caregiverNullPhone.put("profilePhoto", "");
+    caregiverNullPhone.put("email", "valliyammal@yopmail.com");
+    caregiverNullPhone.put("age", "33");
+    caregiverNullPhone.put("relationship", "Sister");
+    caregiverNullPhone.put("emailVerification", true);
+    caregiverNullPhone.put("phoneNoVerificatio", true);
+
+    // Email = null but verification = true
+    Map<String, Object> caregiverNullEmail = new HashMap<>(caregiverNullPhone);
+    caregiverNullEmail.put("phoneNo", "9080706018");
+    caregiverNullEmail.put("email", null);
+    caregiverNullEmail.put("emailVerification", true);
+
+    List<Object> cgCase1List = new ArrayList<>();
+    cgCase1List.add(caregiverNullPhone);
+
+    List<Object> cgCase2List = new ArrayList<>();
+    cgCase2List.add(caregiverNullEmail);
+
+    Map<Object, Object> requestCase1 = new HashMap<>(userPayload);
+    requestCase1.put("careGivers", cgCase1List);
+
+    Map<Object, Object> requestCase2 = new HashMap<>(userPayload);
+    requestCase2.put("careGivers", cgCase2List);
+
+    List<Map<Object, Object>> reqList = new ArrayList<>();
+    reqList.add(requestCase1);
+    reqList.add(requestCase2);
+
+    int i = 0;
+    for (Map<Object, Object> request : reqList) {
+        if (i == 0) {
+            System.out.println("null value on CareGiver Phone number field");
+        } else if (i == 1) {
+            System.out.println("null value on CareGiver email field");
+        }
+        try {
+            APIResponse responseAPI = postRequestWithoutToken("user-registration", "MOBILE", request);
+            int statusCode = responseAPI.status();
+            String response = getBodyData(responseAPI).toString();
+
+            if (isJSONValid(response) && statusCode == 200) {
+                JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
+                String responseCode = responsebody.get("code").getAsString();
+                String responseMessage = responsebody.get("message").getAsString();
+                try {
+                    Assert.assertEquals(responseCode, "1111");
+                    System.out.println("Response code valid : " + responseCode);
+                } catch (AssertionError e) {
+                    System.out.println("Response code invalid : " + responseCode);
+                }
+                try {
+                    Assert.assertEquals(responseMessage, "Data should not be empty");
+                    System.out.println("Response message valid : " + responseMessage);
+                } catch (AssertionError e) {
+                    System.out.println("Response message invalid : " + responseMessage);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+        }
+        System.out.println("------------------------");
+        i++;
+    }
+}
+
 }

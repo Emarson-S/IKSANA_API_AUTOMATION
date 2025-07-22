@@ -41,9 +41,9 @@ public class BaseClass {
 
     // Get API request without authendication
 
-    public static APIResponse getRequestNoAuth(String URL){
+    public static APIResponse getRequestNoAuth(String URL, String Type){
         APIRequestContext context=request();
-        APIResponse response=context.get(origin+URL);
+        APIResponse response=context.get(origin+URL, RequestOptions.create().setHeader("Application", "Iksana-Base").setHeader("Channel",Type));
        return response;
     }
 
