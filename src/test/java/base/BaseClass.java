@@ -55,6 +55,12 @@ public class BaseClass {
        return response;
     }
 
+	public static String basicAuth(String userName,String password){
+		String basicString = ""+userName+":"+password+"";
+        String value="Basic "+encryption(basicString);
+		return value;
+	}
+
     
 	// Post request with Authendication
 
