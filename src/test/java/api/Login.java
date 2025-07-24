@@ -7,10 +7,12 @@ import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 
 import base.BaseClass;
+import io.qameta.allure.Description;
 
 public class Login extends BaseClass {
 
     @Test
+    @Description("loginSuccess")
     public void loginSuccess(){
 
             APIResponse response1 = request().get(origin+ "validate-phone-number",

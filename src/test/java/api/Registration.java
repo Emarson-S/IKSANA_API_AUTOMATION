@@ -88,7 +88,7 @@ public class Registration extends BaseClass {
         }
     }
 
-    @Test
+    @Test()
     public void registrationSuccessWithCG() {
         try {
             Map<String, Object> familyMember = new HashMap<>();
@@ -178,7 +178,7 @@ public class Registration extends BaseClass {
 
     }
 
-    @Test
+    @Test()
     public void userRegDuplicationCheck() {
         
             List<String> caregiverDetails = new ArrayList<>(); //caregiverDetails empty list
@@ -240,7 +240,7 @@ public class Registration extends BaseClass {
         }
     }
     
-    @Test
+    @Test()
     public void userRegDuplicationCheckWithCG() {  
         // Duplication check with user and CG data(Not in DB)
             //duplicate phone in user and CG data and unique email should not in DB
@@ -398,7 +398,7 @@ public class Registration extends BaseClass {
             }
         }
 
-    @Test
+    @Test()
     public void userRegDuplicationCheckWithCGInDB() {
 }
 }
