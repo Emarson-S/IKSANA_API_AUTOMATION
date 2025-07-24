@@ -41,9 +41,9 @@ public class BaseClass {
 
     // Get API request without authendication
 
-    public static APIResponse getRequestNoAuth(String URL){
+    public static APIResponse getRequestNoAuth(String URL, String Type){
         APIRequestContext context=request();
-        APIResponse response=context.get(origin+URL);
+        APIResponse response=context.get(origin+URL, RequestOptions.create().setHeader("Application", "Iksana-Base").setHeader("Channel",Type));
        return response;
     }
 
@@ -54,6 +54,12 @@ public class BaseClass {
         APIResponse response=context.get(origin+URL, RequestOptions.create().setHeader("Authorization",authendication).setHeader("Application", "Iksana-Base").setHeader("Channel",Type));
        return response;
     }
+
+	public static String basicAuth(String userName,String password){
+		String basicString = ""+userName+":"+password+"";
+        String value="Basic "+encryption(basicString);
+		return value;
+	}
 
     
 	// Post request with Authendication
