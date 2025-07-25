@@ -2,7 +2,9 @@ package api;
 import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.testng.Assert;
@@ -562,11 +564,260 @@ public class Login extends BaseClass {
         // }catch(Exception a){
         //     System.out.println("Error occured while generate OTP :" + a.getMessage());
         // }
-
-
-
     }
+ @Test
+    public void LoginSessionSuccess(){
+        try{
+             System.out.println("Already have session check");
+            String phonenumber="5746737928";
+            APIResponse responseAPI = request().get(origin+"validate-phone-number",RequestOptions.create()
+            .setQueryParam("countryCode", "+91")
+                .setQueryParam("phoneNo",phonenumber)
+                .setQueryParam("login", "false")
+                .setQueryParam("hashValue", "5CH1ajIvhkB")
+                .setHeader("Channel", "MOBILE")
+                .setHeader("Application", "Iksana-Base")
+                .setHeader("Content-Type", "application/json"));
+            int statuscode = responseAPI.status();
+            String response = responseAPI.text();
+            if(isJSONValid(response) && statuscode==200){
+                try{
+                    JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
+                    String OTP = responsebody.get("data").getAsString();
+                    String username = basicAuth(phonenumber,OTP);
+                    System.out.println("OTP sent");
 
+                    //Login with otp
+                    System.out.println("Login with otp");
+                    APIResponse responseAPI1 = getRequestWithAuth("login-with-otp", username,"Mobile");
+                    int statuscode1 = responseAPI1.status();
+                    String responsebody1 = responseAPI1.text();
+                    if(isJSONValid(responsebody1) && statuscode1==200){
+                        JsonObject responsebody2 = JsonParser.parseString(responsebody1).getAsJsonObject();
+                        JsonObject responsedata = responsebody2.get("data").getAsJsonObject();
+                        JsonObject userdata = responsedata.get("user").getAsJsonObject();
+                        Map<String, String> userInfo = new HashMap<>();
+                        userInfo.put("userId", userdata.get("userId").getAsString());
+                        userInfo.put("email", userdata.get("email").getAsString());
+                        userInfo.put("phoneNo", userdata.get("phoneNo").getAsString());
+                        userInfo.put("roleId", userdata.get("roleId").getAsString());
+                        userInfo.put("countryCode", userdata.get("countryCode").getAsString());
+                        System.out.println("data found " );
+                        try{
+                            Assert.assertNotNull(responsedata);
+                            System.out.println("Session verification Api called");
+                            // session api call 
+                            APIResponse userlogin = postRequestWithoutToken("session-verification", "WEB", userInfo);
+                            int sessionStatuscode = userlogin.status();
+                            String sessiondata = userlogin.text();
+                            try{
+                                if(isJSONValid(sessiondata) && sessionStatuscode==200){
+                                JsonObject sessioninfo = JsonParser.parseString(sessiondata).getAsJsonObject();
+                                String sessionCode = sessioninfo.get("code").getAsString();
+                                String sessionMessage = sessioninfo.get("message").getAsString();
+                                try {
+                                    Assert.assertEquals(sessionCode, "0000");
+                                    System.out.println("session code is valid :"+sessionCode);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid Session code :"+ e.getMessage());
+                                }
+                                try {
+                                    Assert.assertEquals(sessionMessage, "Login Successfully");
+                                    System.out.println("session code is valid :"+sessionMessage);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid session Message :"+ sessionMessage);
+                                }
+                               }
+                            }
+                            catch(Exception c){
+                                System.out.println("Session data response not found");
+                            }
+
+                        }
+                        catch(Exception b){
+                            System.out.println("data Not found: "+ b.getMessage());
+                        }
+                    }
+                }catch(Exception e){
+                    System.out.println("Error occured while verify OTP :" + e.getMessage());
+                }
+            }
+
+        }catch(Exception a){
+            System.out.println("Error occured while generate OTP :" + a.getMessage());
+        }
+    } 
+
+    @Test
+    public void LoginSessionValidationCheck(){
+        try{
+             System.out.println("negative session check");
+            String phonenumber="5746737928";
+            APIResponse responseAPI = request().get(origin+"validate-phone-number",RequestOptions.create()
+            .setQueryParam("countryCode", "+91")
+                .setQueryParam("phoneNo",phonenumber)
+                .setQueryParam("login", "false")
+                .setQueryParam("hashValue", "5CH1ajIvhkB")
+                .setHeader("Channel", "MOBILE")
+                .setHeader("Application", "Iksana-Base")
+                .setHeader("Content-Type", "application/json"));
+            int statuscode = responseAPI.status();
+            String response = responseAPI.text();
+            if(isJSONValid(response) && statuscode==200){
+                try{
+                    JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
+                    String OTP = responsebody.get("data").getAsString();
+                    String username = basicAuth(phonenumber,OTP);
+                    System.out.println("OTP sent");
+
+                    //Login with otp
+                    System.out.println("Login with otp");
+                    APIResponse responseAPI1 = getRequestWithAuth("login-with-otp", username,"Mobile");
+                    int statuscode1 = responseAPI1.status();
+                    String responsebody1 = responseAPI1.text();
+                    if(isJSONValid(responsebody1) && statuscode1==200){
+                        JsonObject responsebody2 = JsonParser.parseString(responsebody1).getAsJsonObject();
+                        JsonObject responsedata = responsebody2.get("data").getAsJsonObject();
+                        JsonObject userdata = responsedata.get("user").getAsJsonObject();
+                        
+                        //wrong user ID......
+                        
+                        Map<String, String> userInfo = new HashMap<>();
+                        userInfo.put("userId", "82767262"); //wrong userId
+                        userInfo.put("email", userdata.get("email").getAsString());
+                        userInfo.put("phoneNo", userdata.get("phoneNo").getAsString());
+                        userInfo.put("roleId", userdata.get("roleId").getAsString());
+                        userInfo.put("countryCode", userdata.get("countryCode").getAsString());
+                        
+                        try{
+                            Assert.assertNotNull(responsedata);
+                            System.out.println("Session verification Api called with Wrong User ID");
+                            // session api call 
+                            APIResponse userlogin = postRequestWithoutToken("session-verification", "WEB", userInfo);
+                            int sessionStatuscode = userlogin.status();
+                            String sessiondata = userlogin.text();
+                            try{
+                                if(isJSONValid(sessiondata) && sessionStatuscode==200){
+                                JsonObject sessioninfo = JsonParser.parseString(sessiondata).getAsJsonObject();
+                                String sessionCode = sessioninfo.get("code").getAsString();
+                                String sessionMessage = sessioninfo.get("message").getAsString();
+                                try {
+                                    Assert.assertEquals(sessionCode, "1111");
+                                    System.out.println("session code is valid :"+sessionCode);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid Session code :"+ e.getMessage());
+                                }
+                                try {
+                                    Assert.assertEquals(sessionMessage, "Enter a valid data");
+                                    System.out.println("session code is valid :"+sessionMessage);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid session Message :"+ sessionMessage);
+                                }
+                               }
+                            }
+                            catch(Exception c){
+                                System.out.println("Session data response not found");
+                            }
+
+                        }
+                        catch(Exception b){
+                            System.out.println("data Not found: "+ b.getMessage());
+                        }
+                        // wrong Email id 
+                        Map<String, String> userInfo1 = new HashMap<>(userInfo);
+                        userInfo1.put("userId", userdata.get("userId").getAsString());
+                        userInfo1.put("email", "kkrs@gmail.com");
+
+                        try{
+                            Assert.assertNotNull(responsedata);
+                            System.out.println("Session verification Api called with Wrong Email ID");
+                            // session api call 
+                            APIResponse userlogin = postRequestWithoutToken("session-verification", "WEB", userInfo1);
+                            int sessionStatuscode = userlogin.status();
+                            String sessiondata = userlogin.text();
+                            System.out.println("session with wrong email address");
+                            try{
+                                if(isJSONValid(sessiondata) && sessionStatuscode==200){
+                                JsonObject sessioninfo = JsonParser.parseString(sessiondata).getAsJsonObject();
+                                String sessionCode = sessioninfo.get("code").getAsString();
+                                String sessionMessage = sessioninfo.get("message").getAsString();
+                                System.out.println(sessionCode);
+                                System.out.println(sessionMessage);
+                                try {
+                                    Assert.assertEquals(sessionCode, "1111");
+                                    System.out.println("session code is valid :"+sessionCode);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid Session code :"+ e.getMessage());
+                                }
+                                try {
+                                    Assert.assertEquals(sessionMessage, "Enter a valid data");
+                                    System.out.println("session code is valid :"+sessionMessage);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid session Message :"+ sessionMessage);
+                                }
+                               }
+                            }
+                            catch(Exception c){
+                                System.out.println("Session data response not found");
+                            }
+                        }catch(Exception e){
+                            System.out.println("data Not found: "+ e.getMessage());
+                        }
+
+                        // wrong phone number
+                        
+                        Map<String, String> userInfo2 = new HashMap<>(userInfo1);
+                        userInfo1.put("email", userdata.get("email").getAsString());
+                        userInfo1.put("phoneNo", userdata.get("phoneNo").getAsString());
+
+                        try{
+                            Assert.assertNotNull(responsedata);
+                            System.out.println("Session verification Api called with Wrong phoneNO");
+                            // session api call 
+                            APIResponse userlogin = postRequestWithoutToken("session-verification", "WEB", userInfo2);
+                            int sessionStatuscode = userlogin.status();
+                            String sessiondata = userlogin.text();
+                            System.out.println("session with wrong email address");
+                            try{
+                                if(isJSONValid(sessiondata) && sessionStatuscode==200){
+                                JsonObject sessioninfo = JsonParser.parseString(sessiondata).getAsJsonObject();
+                                String sessionCode = sessioninfo.get("code").getAsString();
+                                String sessionMessage = sessioninfo.get("message").getAsString();
+                                System.out.println(sessionCode);
+                                System.out.println(sessionMessage);
+                                try {
+                                    Assert.assertEquals(sessionCode, "1111");
+                                    System.out.println("session code is valid :"+sessionCode);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid Session code :"+ e.getMessage());
+                                }
+                                try {
+                                    Assert.assertEquals(sessionMessage, "Enter a valid data");
+                                    System.out.println("session code is valid :"+sessionMessage);
+                                } catch (Exception e) {
+                                    System.out.println(" Invalid session Message :"+ sessionMessage);
+                                }
+                               }
+                            }
+                            catch(Exception c){
+                                System.out.println("Session data response not found");
+                            }
+
+                        }
+                        catch(Exception b){
+                            System.out.println("data Not found: "+ b.getMessage());
+                        }
+                        
+                    }
+                }catch(Exception e){
+                    System.out.println("Error occured while verify OTP :" + e.getMessage());
+                }
+            }
+
+        }catch(Exception a){
+            System.out.println("Error occured while generate OTP :" + a.getMessage());
+        }
+    }
     
 }
     
