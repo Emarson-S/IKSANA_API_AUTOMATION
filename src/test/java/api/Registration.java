@@ -1,5 +1,6 @@
 package api;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +90,7 @@ public class Registration extends BaseClass {
     }
 
     @Test()
-    public void registrationSuccessWithCG() {
+    public void registrationSuccessWithCG() throws IOException{
         try {
             Map<String, Object> familyMember = new HashMap<>();
             familyMember.put("firstName", "Swathi");
@@ -172,14 +173,14 @@ public class Registration extends BaseClass {
                 System.out.println("Data Not found");
             }
             }     
-        } catch (Exception e) {
+        } catch (AssertionError e) {
             System.out.println("An error occurred during registration: " + e.getMessage());
         }
 
     }
 
     @Test()
-    public void userRegDuplicationCheck() {
+    public void userRegDuplicationCheck() throws IOException{
         
             List<String> caregiverDetails = new ArrayList<>(); //caregiverDetails empty list
             Map<Object, Object> requestPayload0 = new HashMap<>();
@@ -233,7 +234,7 @@ public class Registration extends BaseClass {
                 }
             }
         } 
-        catch (Exception e) {
+        catch (AssertionError e) {
             System.out.println("An error occurred during registration: " + e.getMessage());
         }
         System.out.println("------------------------");
@@ -241,7 +242,7 @@ public class Registration extends BaseClass {
     }
     
     @Test()
-    public void userRegDuplicationCheckWithCG() {  
+    public void userRegDuplicationCheckWithCG() throws IOException{  
         // Duplication check with user and CG data(Not in DB)
             //duplicate phone in user and CG data and unique email should not in DB
             Map<String, Object> familyMember = new HashMap<>();
@@ -390,7 +391,7 @@ public class Registration extends BaseClass {
                     }
                 }
             }
-            catch (Exception e) {
+            catch (AssertionError e) {
             System.out.println("An error occurred during registration: " + e.getMessage());
             }
             System.out.println("------------------------");
@@ -472,7 +473,7 @@ public class Registration extends BaseClass {
     }
 
     @Test
-    public void userRegWithNullValues() {
+    public void userRegWithNullValues() throws IOException{
    
     List<String> caregiverDetails = new ArrayList<>();      //empty cg list
     // Phone number = null but verification = true
@@ -532,8 +533,8 @@ public class Registration extends BaseClass {
                     System.out.println("Response message invalid : " + responseMessage);
                 }
             }
-            } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.getMessage());
+            } catch (AssertionError e) {
+            System.out.println("AssertionError occurred: " + e.getMessage());
             }
 
         System.out.println("------------------------");
@@ -625,7 +626,7 @@ public class Registration extends BaseClass {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception occurred: " + e.getMessage());
+            System.out.println("AssertionError occurred: " + e.getMessage());
         }
         System.out.println("------------------------");
         i++;
@@ -637,9 +638,9 @@ public class Registration extends BaseClass {
                                     //Registration_TC_20
         // email verification....
         Map<Object ,Object> payload = new HashMap<>();
-        payload.put("email","swathi@gmail.com");
+        payload.put("email","mahesh@yopmail.com");
         payload.put("value","email");
-        payload.put("phoneNo",null);
+        payload.put("phoneNo","9000000061");
         try{
             APIResponse response = postRequestWithoutToken("rest/api/v1/email-verify","MOBILE", payload);
             int responseStatus = response.status();
@@ -663,7 +664,7 @@ public class Registration extends BaseClass {
                 }
             
             }
-            catch(Exception e){
+            catch(AssertionError e){
                 System.out.println("error Occured :"+e.getMessage());
             }
         // phoneNo verification...
@@ -694,7 +695,7 @@ public class Registration extends BaseClass {
                 }
             
             }
-            catch(Exception e){
+            catch(AssertionError e){
                 System.out.println("error Occured :"+e.getMessage());
             }
     }
@@ -732,7 +733,7 @@ public class Registration extends BaseClass {
                 }
             
             }
-            catch(Exception e){
+            catch(AssertionError e){
                 System.out.println("error Occured :"+e.getMessage());
             }
                                  //Registration_TC_23
@@ -764,7 +765,7 @@ public class Registration extends BaseClass {
                 }
             
         }
-        catch(Exception e){
+        catch(AssertionError e){
             System.out.println("error Occured :"+e.getMessage());
         }
     }
@@ -802,7 +803,7 @@ public class Registration extends BaseClass {
                 }
             
             }
-            catch(Exception e){
+            catch(AssertionError e){
                 System.out.println("error Occured :"+e.getMessage());
             }
                                  //Registration_TC_25
@@ -834,7 +835,7 @@ public class Registration extends BaseClass {
                 }
             
         }
-        catch(Exception e){
+        catch(AssertionError e){
             System.out.println("error Occured :"+e.getMessage());
         }
 
@@ -871,10 +872,358 @@ public class Registration extends BaseClass {
                 }
             
         }
-        catch(Exception e){
+        catch(AssertionError e){
             System.out.println("error Occured :"+e.getMessage());
         }
     }
 
+    @Test
+    public void codeVerificationSuccess(){
+                                           //Registration_TC_27
+        // email verification sucess ....
+        System.out.println("Successfull code verification for email");
+        String VerificationCode = "IK3198"; //input 
+        Map<Object ,Object> payload = new HashMap<>();
+        payload.put("email","prem@gmaol.com");
+        payload.put("verificationCode",VerificationCode);
+        payload.put("value","email");
+        APIResponse response = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload);
+        int statusCode = response.status();
+        String ResponseMessage = response.text();
+        if(isJSONValid(ResponseMessage)&&statusCode==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "0000");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Successfully updated");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+                                    //Registration_TC_28
+        // phone verification sucess ....
+        System.out.println("Successfull code verification for phoneNumber");
+        String VerificationCode1 = "961236"; //input 
+        Map<Object ,Object> payload1 = new HashMap<>();
+        payload1.put("phoneNo","8686868686");
+        payload1.put("verificationCode",VerificationCode1);
+        payload1.put("value","phone");
+        APIResponse response1 = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload1);
+        int statusCode1 = response1.status();
+        String ResponseMessage1 = response1.text();
+        if(isJSONValid(ResponseMessage)&&statusCode1==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage1).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "0000");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Successfully updated");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+    }
 
+    @Test
+    public void codeVerificationEmailFailure(){
+         // email verification failure ....
+        System.out.println("code verification failure for invalid email");
+
+        Map<Object ,Object> payload = new HashMap<>();
+        payload.put("email","prem@gmail.com"); // invalid email
+        payload.put("verificationCode","IK3198"); // valid code
+        payload.put("value","email");
+        APIResponse response = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload);
+        int statusCode = response.status();
+        String ResponseMessage = response.text();
+        if(isJSONValid(ResponseMessage)&&statusCode==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "1111");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Please enter a valid code");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+
+        System.out.println("code verification failure for invalid verificationCode");
+        
+        Map<Object ,Object> payload1 = new HashMap<>();
+        payload1.put("email","prem@gmail.com"); // valid email
+        payload1.put("verificationCode","IK3298"); // invalid code
+        payload1.put("value","email");
+        APIResponse response1 = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload1);
+        int statusCode1 = response1.status();
+        String ResponseMessage1 = response1.text();
+        if(isJSONValid(ResponseMessage1)&&statusCode1==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage1).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "1111");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Please enter a valid code");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+
+        System.out.println("code verification failure for wrong value");
+        
+        Map<Object ,Object> payload2 = new HashMap<>();
+        payload2.put("email","prem@gmail.com"); // valid email
+        payload2.put("verificationCode","IK3198"); // valid code
+        payload2.put("value","phone"); // wrong value
+        APIResponse response2 = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload2);
+        int statusCode2 = response2.status();
+        String ResponseMessage2 = response2.text();
+        if(isJSONValid(ResponseMessage2)&&statusCode2==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage2).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "1111");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Please enter a valid code");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+    
+    }
+
+     @Test
+    public void codeVerificationPhoneFailure(){
+         // phoneNo verification failure ....
+        System.out.println("code verification failure for invalid phoneNumber");
+
+        Map<Object ,Object> payload = new HashMap<>();
+        payload.put("phoneNo","8686238686"); // invalid phone number
+        payload.put("verificationCode","961236"); // valid code
+        payload.put("value","phone");
+        APIResponse response = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload);
+        int statusCode = response.status();
+        String ResponseMessage = response.text();
+        if(isJSONValid(ResponseMessage)&&statusCode==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "1111");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Please enter a valid code");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+
+        System.out.println("code verification failure for invalid verificationCode");
+        
+        Map<Object ,Object> payload1 = new HashMap<>();
+        payload1.put("phoneNo","8686868686"); // valid phoneNumber
+        payload1.put("verificationCode","965236"); // invalid code
+        payload1.put("value","phone");
+        APIResponse response1 = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload1);
+        int statusCode1 = response1.status();
+        String ResponseMessage1 = response1.text();
+        if(isJSONValid(ResponseMessage1)&&statusCode1==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage1).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "1111");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + responseCode);
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Please enter a valid code");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + responseMessage);
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+
+        System.out.println("code verification failure for wrong value");
+        
+        Map<Object ,Object> payload2 = new HashMap<>();
+        payload2.put("phoneNo","8686868686"); // valid phoneNumber
+        payload2.put("verificationCode","961236"); // valid code
+        payload2.put("value","email"); // wrong value
+        APIResponse response2 = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload2);
+        int statusCode2 = response2.status();
+        String ResponseMessage2 = response2.text();
+        if(isJSONValid(ResponseMessage2)&&statusCode2==200){
+        JsonObject responseBody=JsonParser.parseString(ResponseMessage2).getAsJsonObject();
+        String responseCode = responseBody.get("code").getAsString();
+        String responseMessage = responseBody.get("message").getAsString();
+        try{
+            Assert.assertEquals(responseCode, "1111");
+            System.out.println("Success code valid : " + responseCode);
+        }
+        catch(AssertionError e){
+            System.out.println("Success code invalid : " + e.getMessage());
+        }
+        try {
+            Assert.assertEquals(responseMessage, "Please enter a valid code");
+            System.out.println("Success message valid : " + responseMessage);
+        } catch (AssertionError e) {
+            System.out.println("Success message invalid : " + e.getMessage());
+        }
+        }
+        else{
+            System.out.println("error in response");
+        }
+    
+    }
+
+    @Test
+    public void duplicateVerification(){
+
+                                    //Registration_TC_35
+
+        // System.out.println("email verification sent");
+        // Map<Object ,Object> payload = new HashMap<>();
+        // payload.put("email","mahesh@gmail.com");
+        // payload.put("value","email");
+        // payload.put("phoneNo","9000000061");
+        // try{
+        //     APIResponse response = postRequestWithoutToken("rest/api/v1/email-verify","MOBILE", payload);
+        //     int responseStatus = response.status();
+        //     String responseMessage = response.text();
+        //         if(isJSONValid(responseMessage) && responseStatus==200){
+                    try{
+                        System.out.println("code verification success");
+                        String VerificationCode = "IK3949"; //input code
+                        Map<Object ,Object> payload1 = new HashMap<>();
+                        payload1.put("email","mahesh@yopmail.com"); 
+                        payload1.put("verificationCode",VerificationCode); 
+                        payload1.put("value","email");
+                        APIResponse response1 = postRequestWithoutToken("rest/api/v1/code-verification", "Mobile", payload1);
+                        int statusCode1 = response1.status();
+                        String ResponseMessage1 = response1.text();
+                        if(isJSONValid(ResponseMessage1)&&statusCode1==200){
+                        JsonObject responseBody1=JsonParser.parseString(ResponseMessage1).getAsJsonObject();
+                        String responseCode1 = responseBody1.get("code").getAsString();
+                            try{
+                                Assert.assertEquals(responseCode1, "0000");
+                                System.out.println("Success code valid : " + responseCode1);
+
+                                //dupicate verification for already verified email
+
+                                try{
+                                    System.out.println("email verification sent for already verified email");
+                                    Map<Object ,Object> payload3 = new HashMap<>();
+                                        payload3.put("email","mahesh@yopmail.com");
+                                        payload3.put("value","email");
+                                        payload3.put("phoneNo","9000000061");
+                                    try{
+                                        APIResponse response3 = postRequestWithoutToken("rest/api/v1/email-verify","MOBILE", payload3);
+                                        int responseStatus3 = response3.status();
+                                        String responseMessage3 = response3.text();
+                                        if(isJSONValid(responseMessage3) && responseStatus3==200){
+                                            JsonObject responseBody3=JsonParser.parseString(responseMessage3).getAsJsonObject();
+                                            String responseCode3 = responseBody3.get("code").getAsString();
+                                            String responseMessage4 = responseBody3.get("message").getAsString();
+
+                                            try {
+                                                Assert.assertEquals(responseCode3, "2222");
+                                                System.out.println("response code valid :"+responseCode3);
+                                            } catch (AssertionError e) {
+                                                System.out.println(e.getMessage());
+                                            }
+                                             try {
+                                                Assert.assertEquals(responseMessage4, "Email address is already verified");
+                                                System.out.println("response code valid :"+responseMessage4);
+                                            } catch (AssertionError e) {
+                                                System.out.println(e.getMessage());
+                                            }
+
+                                        }
+                                    }
+                                    catch(Exception e){
+
+                                    }
+                                }
+                                catch(Exception e){
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+                            catch(AssertionError e){
+                                System.out.println("Success code invalid : " + responseCode1);
+                            }
+                        }
+                        else{
+                            System.out.println("error in response");
+                        }
+
+                    }
+                    catch(Exception e){
+
+                    }
+                }                
 }
