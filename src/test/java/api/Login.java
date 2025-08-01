@@ -1,11 +1,10 @@
 package api;
-import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,11 +15,11 @@ import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 
 import base.BaseClass;
-import io.qameta.allure.Description;
+
 
 public class Login extends BaseClass {
 
-    @Test
+    @Test(description="Login")
     public void phoneNoVerificationSuccess(){
         // Login using Registered Phone number
          try {
