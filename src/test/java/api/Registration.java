@@ -90,7 +90,7 @@ public class Registration extends BaseClass {
         }
     }
 
-    @Test()
+    @Test(description = "Registration")
     public void registrationSuccessWithCG() throws IOException{
         try {
             Map<String, Object> familyMember = new HashMap<>();
@@ -185,7 +185,7 @@ public class Registration extends BaseClass {
 
     }
 
-    @Test()
+    @Test(description = "Registration")
     public void userRegDuplicationCheck() throws IOException{
         
             List<String> caregiverDetails = new ArrayList<>(); //caregiverDetails empty list
@@ -246,7 +246,7 @@ public class Registration extends BaseClass {
         }
     }
     
-    @Test()
+    @Test(description = "Registration")
     public void userRegDuplicationCheckWithCG() throws IOException{  
         // Duplication check with user and CG data(Not in DB)
             //duplicate phone in user and CG data and unique email should not in DB
@@ -404,7 +404,7 @@ public class Registration extends BaseClass {
             }
         }
 
-    @Test
+    @Test(description = "Registration")
     public void userRegCGLimitCheck() {
 
                                     //Registration_TC_15
@@ -477,7 +477,7 @@ public class Registration extends BaseClass {
             }
     }
 
-    @Test
+    @Test(description = "Registration")
     public void userRegWithNullValues() throws IOException{
    
     List<String> caregiverDetails = new ArrayList<>();      //empty cg list
@@ -547,7 +547,7 @@ public class Registration extends BaseClass {
     }
 }
 
-    @Test
+    @Test(description = "Registration")
     public void caregiverRegWithNullValues() {
 
     Map<Object, Object> userPayload = new HashMap<>();
@@ -638,7 +638,7 @@ public class Registration extends BaseClass {
     }
 }
 
-    @Test
+    @Test(description = "Email and Phone Verification")
     public void userVerificationSuccess(){
                                     //Registration_TC_20
         // email verification....
@@ -705,7 +705,7 @@ public class Registration extends BaseClass {
             }
     }
 
-    @Test
+    @Test(description = "Email and Phone Verification")
     public void userVerificationEmailFailure(){
 
                                     //Registration_TC_22
@@ -775,7 +775,7 @@ public class Registration extends BaseClass {
         }
     }
 
-    @Test
+    @Test(description = "Email and Phone Verification")
     public void userVerificationPhoneNoFailure(){
 
                                      //Registration_TC_24
@@ -882,7 +882,7 @@ public class Registration extends BaseClass {
         }
     }
 
-    @Test
+    @Test(description = "Email and Phone Verification")
     public void codeVerificationSuccess(){
                                            //Registration_TC_27
         // email verification sucess ....
@@ -950,7 +950,7 @@ public class Registration extends BaseClass {
         }
     }
 
-    @Test
+    @Test(description = "Email and Phone Verification")
     public void codeVerificationEmailFailure(){
          // email verification failure ....
         System.out.println("code verification failure for invalid email");
@@ -1048,7 +1048,7 @@ public class Registration extends BaseClass {
     
     }
 
-     @Test
+     @Test(description = "Email and Phone Verification")
     public void codeVerificationPhoneFailure(){
          // phoneNo verification failure ....
         System.out.println("code verification failure for invalid phoneNumber");
@@ -1146,7 +1146,7 @@ public class Registration extends BaseClass {
     
     }
 
-    @Test
+    @Test(description = "Email and Phone Verification")
     public void duplicateVerification(){
 
                                     //Registration_TC_35

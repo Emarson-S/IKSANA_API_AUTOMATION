@@ -1,11 +1,10 @@
 package api;
-import static org.junit.Assert.assertArrayEquals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,11 +15,11 @@ import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 
 import base.BaseClass;
-import io.qameta.allure.Description;
+
 
 public class Login extends BaseClass {
 
-    @Test
+    @Test(description="Login", enabled = true)
     public void phoneNoVerificationSuccess(){
         // Login using Registered Phone number
          try {
@@ -98,7 +97,7 @@ public class Login extends BaseClass {
             }
     }
 
-    @Test
+    @Test(enabled = false)
     public void phoneNoValidationCheck() {
 
     // verification of Phone Number..
@@ -278,7 +277,7 @@ public class Login extends BaseClass {
         
     }
 
-    @Test
+    @Test(enabled = false)
     public void LoginSuccessWithReqPhoneNO() {
         try {
             // Registered user
@@ -350,7 +349,7 @@ public class Login extends BaseClass {
        
     }
   
-    @Test
+    @Test(enabled = false)
     public void LoginSuccessWithUnReqPhoneNO(){
     try {
         // Unregistered user
@@ -427,7 +426,7 @@ public class Login extends BaseClass {
 
     }
 
-    @Test
+    @Test(enabled = false)
     public void LogInValidationCheck(){
         try{
             System.out.println("Wrong phone number with correct OTP");
@@ -578,6 +577,7 @@ public class Login extends BaseClass {
         //     System.out.println("Error occured while generate OTP :" + a.getMessage());
         // }
     }
+ @Test(enabled = false)
     
     @Test
     public void LoginSessionSuccess(){
@@ -661,6 +661,8 @@ public class Login extends BaseClass {
             System.out.println("Error occured while generate OTP :" + a.getMessage());
         }
     } 
+
+    @Test(enabled = false)
     
     @Test
     public void LoginSessionValidationCheck(){

@@ -1,0 +1,8 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"unknown","Fri Aug 01 15:04:39 IST 2025","Fri Aug 01 15:04:39 IST 2025","0","Suite","Test","api.Login","api.Login","LoginSessionSuccess","LoginSessionSuccess",""
+"unknown","Fri Aug 01 15:04:38 IST 2025","Fri Aug 01 15:04:38 IST 2025","13","Suite","Test","api.Login","api.Login","phoneNoValidationCheck","phoneNoValidationCheck",""
+"unknown","Fri Aug 01 15:04:38 IST 2025","Fri Aug 01 15:04:38 IST 2025","0","Suite","Test","api.Login","api.Login","LoginSessionValidationCheck","LoginSessionValidationCheck",""
+"unknown","Fri Aug 01 15:04:38 IST 2025","Fri Aug 01 15:04:38 IST 2025","0","Suite","Test","api.Login","api.Login","LoginSuccessWithReqPhoneNO","LoginSuccessWithReqPhoneNO",""
+"passed","Fri Aug 01 15:04:39 IST 2025","Fri Aug 01 15:04:59 IST 2025","20595","Suite","Test","api.Login","api.Login","phoneNoVerificationSuccess","Login",""
+"unknown","Fri Aug 01 15:04:38 IST 2025","Fri Aug 01 15:04:38 IST 2025","0","Suite","Test","api.Login","api.Login","LoginSuccessWithUnReqPhoneNO","LoginSuccessWithUnReqPhoneNO",""
+"unknown","Fri Aug 01 15:04:39 IST 2025","Fri Aug 01 15:04:39 IST 2025","0","Suite","Test","api.Login","api.Login","LogInValidationCheck","LogInValidationCheck",""
