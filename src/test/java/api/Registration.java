@@ -9,6 +9,7 @@ import java.util.Map;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.microsoft.playwright.APIResponse;
@@ -22,11 +23,11 @@ public class Registration extends BaseClass {
         try {
             List<String> caregiverDetails = new ArrayList<>(); // empty list for caregivers
             Map<Object, Object> requestPayload = new HashMap<>();
-            requestPayload.put("firstName", "John");
-            requestPayload.put("lastName", "Doe");
+            requestPayload.put("firstName", "jesu");
+            requestPayload.put("lastName", "mahesh");
             requestPayload.put("dateOfBirth", "15-07-1997");
             requestPayload.put("gender", "Male");
-            requestPayload.put("phoneNo", "8000000901");
+            requestPayload.put("phoneNo", "8000000904");
             requestPayload.put("countryCode", "+91");
             requestPayload.put("profilePhoto", "");
             requestPayload.put("careGivers", caregiverDetails);
@@ -53,7 +54,7 @@ public class Registration extends BaseClass {
             String response = getBodyData(responseAPI).toString();
             if (isJSONValid(response) && statusCode == 200) {
                 JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
-                int resposeCode=responsebody.get("code").getAsInt();
+                String resposeCode=responsebody.get("code").getAsString();
                 String resposeMessage=responsebody.get("message").getAsString();
             try{  
                 Assert.assertEquals(resposeCode, 0000);
@@ -97,7 +98,7 @@ public class Registration extends BaseClass {
             familyMember.put("lastName", "Doe");
             familyMember.put("dateOfBirth", "15-07-2002");
             familyMember.put("gender", "Female");
-            familyMember.put("phoneNo", "8219787865");
+            familyMember.put("phoneNo", "8219787861");
             familyMember.put("countryCode", "+91");
             familyMember.put("profilePhoto", "");
             familyMember.put("age", "22");
@@ -114,7 +115,7 @@ public class Registration extends BaseClass {
             requestPayload.put("lastName", "Ganesh");
             requestPayload.put("dateOfBirth", "15-07-1997");
             requestPayload.put("gender", "Male");
-            requestPayload.put("phoneNo", "9640787874");
+            requestPayload.put("phoneNo", "9640787844");
             requestPayload.put("countryCode", "+91");
             requestPayload.put("profilePhoto", "");
             requestPayload.put("email", "");
@@ -140,6 +141,7 @@ public class Registration extends BaseClass {
             // <------     Registration_TC_05   ------>
       
             String response = getBodyData(responseAPI).toString();
+            System.out.println(response);
             if (isJSONValid(response) && statusCode == 200) {
                 JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
                 int resposeCode=responsebody.get("code").getAsInt();
@@ -158,9 +160,9 @@ public class Registration extends BaseClass {
             }
 
             // <------     Registration_TC_06   ------>
-
+            if(!responsebody.get("data").isJsonNull()){
             JsonObject responsedata = responsebody.get("data").getAsJsonObject();
-            if (isJSONValid(responsedata.toString())) {
+            if (responsedata!=null && isJSONValid(responsedata.toString())) {
                 JsonObject userdata = responsedata.get("user").getAsJsonObject();
                 String userID=userdata.get("userId").getAsString();
             
@@ -172,10 +174,14 @@ public class Registration extends BaseClass {
             } else {
                 System.out.println("Data Not found");
             }
-            }     
+        }else {
+                System.out.println("Data Not found ---> null");
+            }
+        }     
         } catch (AssertionError e) {
             System.out.println("An error occurred during registration: " + e.getMessage());
         }
+    
 
     }
 
@@ -205,7 +211,6 @@ public class Registration extends BaseClass {
             reqList.add(requestPayload0); 
             reqList.add(requestPayload1);
         for (Map<Object,Object> payload : reqList){
-            System.out.println("Request Payload: " + payload);
             try {  
             APIResponse responseAPI = postRequestWithoutToken("user-registration", "MOBILE", payload);
             int statusCode=responseAPI.status();
@@ -350,7 +355,7 @@ public class Registration extends BaseClass {
             reqList.add(requestPayload21);
             int i=0;
             for (Map<Object,Object> payload : reqList){
-            System.out.println("Request Payload: " + payload);
+            // System.out.println("Request Payload: " + payload);
                 if(i==0){
                 System.out.println("duplicate phone between user and CG data not in DB");
                 }

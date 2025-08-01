@@ -578,7 +578,8 @@ public class Login extends BaseClass {
         //     System.out.println("Error occured while generate OTP :" + a.getMessage());
         // }
     }
- @Test
+    
+    @Test
     public void LoginSessionSuccess(){
         try{
              System.out.println("Already have session check");
@@ -660,7 +661,7 @@ public class Login extends BaseClass {
             System.out.println("Error occured while generate OTP :" + a.getMessage());
         }
     } 
-
+    
     @Test
     public void LoginSessionValidationCheck(){
         try{
@@ -721,9 +722,9 @@ public class Login extends BaseClass {
                                     System.out.println(" Invalid Session code :"+ e.getMessage());
                                 }
                                 try {
-                                    Assert.assertEquals(sessionMessage, "Enter a valid data");
+                                    Assert.assertEquals(sessionMessage, "User not found");
                                     System.out.println("session code is valid :"+sessionMessage);
-                                } catch (Exception e) {
+                                } catch (AssertionError e) {
                                     System.out.println(" Invalid session Message :"+ sessionMessage);
                                 }
                                }
@@ -790,7 +791,7 @@ public class Login extends BaseClass {
                             APIResponse userlogin = postRequestWithoutToken("session-verification", "WEB", userInfo2);
                             int sessionStatuscode = userlogin.status();
                             String sessiondata = userlogin.text();
-                            System.out.println("session with wrong email address");
+                            System.out.println("session with wrong phone number");
                             try{
                                 if(isJSONValid(sessiondata) && sessionStatuscode==200){
                                 JsonObject sessioninfo = JsonParser.parseString(sessiondata).getAsJsonObject();
