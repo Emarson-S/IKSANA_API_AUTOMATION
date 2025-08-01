@@ -151,8 +151,14 @@ public class Login extends BaseClass {
                                 break;
                             }
                             try {
+                                if(i==1){
+                                    Assert.assertEquals(responseMessage, "Data should not be empty");
+                                    System.out.println("Response message valid : " + responseMessage);
+                                    }
+                                    else{
                                 Assert.assertEquals(responseMessage, "Please enter valid phone number");
                                 System.out.println("Response message valid : " + responseMessage);
+                                    }
                             } catch (AssertionError e) {
                                 System.out.println("Response message invalid : " + responseMessage);
                             }
@@ -210,8 +216,14 @@ public class Login extends BaseClass {
                         break;
                     }
                     try {
-                        Assert.assertEquals(responseMessage, "Please enter valid phone number");
+                        if(j==1){
+                        Assert.assertEquals(responseMessage, "Data should not be empty");
                         System.out.println("Response message valid : " + responseMessage);
+                        }
+                        else{
+                            Assert.assertEquals(responseMessage, "Please enter proper contry code");
+                            System.out.println("Response message valid : " + responseMessage);
+                        }
                     } catch (AssertionError e) {
                         System.out.println("Response message invalid : " + responseMessage);
                     }
@@ -238,6 +250,7 @@ public class Login extends BaseClass {
 
             int statusCode = responseAPI.status();
             String response = responseAPI.text();
+            System.out.println("Blank Hash value");
 
             if (isJSONValid(response) && statusCode == 200) {
                 JsonObject responsebody = JsonParser.parseString(response).getAsJsonObject();
