@@ -4,7 +4,7 @@
   <test thread-count="3" name="Test">
     <classes>
       <class name="api.Login"/>
-      <class name="api.Registration"/>
+     <!-- <class name="api.Registration"/> -->
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

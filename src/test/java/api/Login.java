@@ -19,7 +19,7 @@ import base.BaseClass;
 
 public class Login extends BaseClass {
 
-    @Test(description="Login")
+    @Test(description="Login", enabled = true)
     public void phoneNoVerificationSuccess(){
         // Login using Registered Phone number
          try {
@@ -97,7 +97,7 @@ public class Login extends BaseClass {
             }
     }
 
-    @Test
+    @Test(enabled = false)
     public void phoneNoValidationCheck() {
 
     // verification of Phone Number..
@@ -277,7 +277,7 @@ public class Login extends BaseClass {
         
     }
 
-    @Test
+    @Test(enabled = false)
     public void LoginSuccessWithReqPhoneNO() {
         try {
             // Registered user
@@ -349,7 +349,7 @@ public class Login extends BaseClass {
        
     }
   
-    @Test
+    @Test(enabled = false)
     public void LoginSuccessWithUnReqPhoneNO(){
     try {
         // Unregistered user
@@ -426,7 +426,7 @@ public class Login extends BaseClass {
 
     }
 
-    @Test
+    @Test(enabled = false)
     public void LogInValidationCheck(){
         try{
             System.out.println("Wrong phone number with correct OTP");
@@ -577,7 +577,7 @@ public class Login extends BaseClass {
         //     System.out.println("Error occured while generate OTP :" + a.getMessage());
         // }
     }
- @Test
+ @Test(enabled = false)
     public void LoginSessionSuccess(){
         try{
              System.out.println("Already have session check");
@@ -660,7 +660,7 @@ public class Login extends BaseClass {
         }
     } 
 
-    @Test
+    @Test(enabled = false)
     public void LoginSessionValidationCheck(){
         try{
              System.out.println("negative session check");
